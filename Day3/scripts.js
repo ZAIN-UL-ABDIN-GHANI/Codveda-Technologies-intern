@@ -190,7 +190,7 @@
             new CounterApp();
             
             // Add welcome message
-            console.log('%c🚀 Counter App Initialized Successfully!', 'color: #00e5ff; font-size: 16px; font-weight: bold;');
+            console.log('%c Counter App Initialized Successfully!', 'color: #00e5ff; font-size: 16px; font-weight: bold;');
             console.log('%c Created by Zain Ul Abedin Ghani', 'color: #4caf50; font-size: 14px;');
             console.log('%c Keyboard Shortcuts: ↑/+ (increment), ↓/- (decrement), R/0 (reset)', 'color: #ff9800; font-size: 12px;');
         });
