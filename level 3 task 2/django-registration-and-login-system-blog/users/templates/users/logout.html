@@ -1,0 +1,19 @@
+{% extends "users/base.html" %}
+{% block title %}Logout{% endblock title %}
+{% block content %}
+
+<div style="max-width: 360px; margin: 60px auto; padding: 25px; border-radius: 10px; 
+            background: linear-gradient(135deg, #00bcd4, #26c6da); color: white; font-family: sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+    <h3 style="margin-bottom: 15px; font-weight: 600;">You have been logged out</h3>
+    <p style="line-height: 1.5; font-size: 1rem;">
+        Thanks for your time! Feel free to contact me for any comments or suggestions using my email address.
+    </p>
+    <hr style="border: none; height: 1px; background-color: rgba(255,255,255,0.3); margin: 25px 0;">
+    <a href="{% url 'login' %}" 
+       style="display: inline-block; width: 100%; text-align: center; padding: 10px 0; background: white; color: #00acc1; 
+              font-weight: bold; border-radius: 6px; text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+        Sign in again
+    </a>
+</div>
+
+{% endblock content %}

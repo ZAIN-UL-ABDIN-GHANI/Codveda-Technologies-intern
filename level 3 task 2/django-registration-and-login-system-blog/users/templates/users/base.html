@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!--Font awesome icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+    <title>{% block title %} {% endblock %} </title>
+    
+    <style>
+        /* Global Styles */
+        :root {
+            --primary-cyan: #00bcd4;
+            --secondary-cyan: #0097a7;
+            --light-cyan: #00e5ff;
+            --cyan-bg: #e0f7fa;
+            --cyan-light-bg: #b2ebf2;
+            --cyan-dark: #006064;
+            --cyan-text: #00838f;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--cyan-bg) 0%, var(--cyan-light-bg) 50%, #80deea 100%) !important;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+            color: var(--cyan-dark) !important;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 229, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 188, 212, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        /* Container Styles */
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 188, 212, 0.15);
+            border: 1px solid rgba(0, 188, 212, 0.1);
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .navbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--light-cyan), var(--primary-cyan), var(--secondary-cyan), var(--light-cyan));
+            background-size: 200% 100%;
+            animation: gradientFlow 3s ease-in-out infinite;
+        }
+        
+        .navbar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 188, 212, 0.2);
+        }
+        
+        .navbar-brand {
+            color: var(--primary-cyan) !important;
+            font-weight: 700 !important;
+            font-size: 1.4rem !important;
+            text-decoration: none !important;
+            position: relative;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-brand::before {
+            content: '🏠';
+            margin-right: 8px;
+            font-size: 1.2rem;
+            animation: bounce 2s infinite;
+        }
+        
+        .navbar-brand:hover {
+            color: var(--light-cyan) !important;
+            transform: translateX(5px);
+        }
+        
+        .navbar-toggler {
+            border: 2px solid var(--primary-cyan) !important;
+            border-radius: 8px;
+            padding: 6px 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-toggler:hover {
+            background: var(--primary-cyan);
+            transform: scale(1.05);
+        }
+        
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='%2300bcd4' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        }
+        
+        .navbar-nav .nav-link {
+            color: var(--cyan-text) !important;
+            font-weight: 500 !important;
+            margin: 0 8px;
+            padding: 8px 16px !important;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            text-decoration: none !important;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            color: white !important;
+            background: linear-gradient(135deg, var(--primary-cyan), var(--secondary-cyan));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 188, 212, 0.3);
+        }
+        
+        .navbar-nav .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--light-cyan), var(--primary-cyan));
+            border-radius: 25px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+        
+        .navbar-nav .nav-link:hover::before {
+            opacity: 1;
+        }
+        
+        /* Add icons to nav links */
+        .nav-link[href*="profile"]::after { content: ' 👤'; }
+        .nav-link[href*="logout"]::after { content: ' 🚪'; }
+        .nav-link[href*="login"]::after { content: ' 🔑'; }
+        
+        /* Alert Styles */
+        .alert {
+            border: none !important;
+            border-radius: 12px !important;
+            padding: 15px 20px !important;
+            margin: 20px 0 !important;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .alert::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+            pointer-events: none;
+        }
+        
+        .alert-success {
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%) !important;
+            color: white !important;
+        }
+        
+        .alert-danger {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%) !important;
+            color: white !important;
+        }
+        
+        .alert-warning {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%) !important;
+            color: white !important;
+        }
+        
+        .alert-info {
+            background: linear-gradient(135deg, var(--primary-cyan) 0%, var(--secondary-cyan) 100%) !important;
+            color: white !important;
+        }
+        
+        .alert .close {
+            color: white !important;
+            opacity: 0.8 !important;
+            font-size: 1.5rem !important;
+            transition: all 0.3s ease;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .alert .close:hover {
+            opacity: 1 !important;
+            transform: scale(1.1);
+        }
+        
+        /* Content Area */
+        .col-md-12 {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Animations */
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(30deg); }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        /* Scrollbar Styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 188, 212, 0.1);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary-cyan), var(--secondary-cyan));
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--light-cyan), var(--primary-cyan));
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem !important;
+                margin: 1rem auto !important;
+            }
+            
+            .navbar {
+                padding: 12px 15px !important;
+                margin-bottom: 15px !important;
+            }
+            
+            .navbar-brand {
+                font-size: 1.2rem !important;
+            }
+            
+            .navbar-nav .nav-link {
+                margin: 5px 0 !important;
+                padding: 10px 15px !important;
+            }
+            
+            .alert {
+                margin: 15px 0 !important;
+                padding: 12px 15px !important;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding: 0.5rem !important;
+                margin: 0.5rem auto !important;
+            }
+            
+            .navbar {
+                padding: 10px 12px !important;
+                border-radius: 12px !important;
+            }
+            
+            .navbar-brand {
+                font-size: 1.1rem !important;
+            }
+            
+            .navbar-brand::before {
+                font-size: 1rem !important;
+                margin-right: 5px !important;
+            }
+            
+            .navbar-nav .nav-link {
+                font-size: 0.9rem !important;
+                padding: 8px 12px !important;
+            }
+            
+            .alert {
+                font-size: 0.9rem !important;
+                padding: 10px 12px !important;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .navbar-brand {
+                font-size: 1rem !important;
+            }
+            
+            .navbar-nav .nav-link {
+                font-size: 0.85rem !important;
+                padding: 6px 10px !important;
+            }
+            
+            .alert {
+                font-size: 0.85rem !important;
+            }
+        }
+        
+        /* Focus and accessibility improvements */
+        .navbar-nav .nav-link:focus,
+        .navbar-brand:focus,
+        .navbar-toggler:focus {
+            outline: 2px solid var(--light-cyan);
+            outline-offset: 2px;
+        }
+        
+        /* Enhanced hover effects */
+        .navbar-nav .nav-link:hover::after {
+            animation: bounce 0.6s ease;
+        }
+        
+        /* Loading animation for dynamic content */
+        .content-loader {
+            position: relative;
+        }
+        
+        .content-loader::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--light-cyan), transparent);
+            animation: loading 2s infinite;
+        }
+        
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container p-3 my-3" style="
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 20px 40px rgba(0, 188, 212, 0.1);
+        position: relative;
+        overflow: hidden;
+    ">
+        <!-- Decorative elements -->
+        <div style="
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.05) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+            pointer-events: none;
+        "></div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-expand-md navbar-light">
+                    <a href="/" class="navbar-brand">Home</a>
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse" 
+                            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <div class="navbar-nav ml-auto">
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'users-profile' %}" class="nav-item nav-link">Profile</a>
+                                <a href="{% url 'logout' %}" class="nav-item nav-link">Logout</a>
+                            {% else %}
+                                <a href="{% url 'login' %}" class="nav-item nav-link">Sign in</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </nav>
+                
+                <!--Any flash messages pop up in any page because this is the base template-->
+                {% if messages %}
+                    <div class="alert alert-dismissible" role="alert" style="
+                        position: relative;
+                        z-index: 10;
+                    ">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" style="
+                                margin-bottom: 10px;
+                                animation: slideInDown 0.5s ease-out;
+                            ">
+                                <strong>
+                                    {% if message.tags == 'success' %}🎉{% endif %}
+                                    {% if message.tags == 'error' or message.tags == 'danger' %}⚠️{% endif %}
+                                    {% if message.tags == 'warning' %}🔔{% endif %}
+                                    {% if message.tags == 'info' %}ℹ️{% endif %}
+                                </strong>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="
+                            position: absolute;
+                            top: 10px;
+                            right: 15px;
+                            z-index: 11;
+                        ">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endif %}
+                
+                <div class="content-area" style="position: relative; z-index: 1;">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- A plugin for password show/hide  -->
+    <script src="https://unpkg.com/bootstrap-show-password@1.2.1/dist/bootstrap-show-password.min.js"></script>
+
+    <style>
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</body>
+</html>

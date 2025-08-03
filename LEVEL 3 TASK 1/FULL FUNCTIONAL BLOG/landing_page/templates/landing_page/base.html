@@ -1,0 +1,591 @@
+{% load static %}
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% tailwind_css %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}ZynBlogs - Your ultimate resource for mastering modern front-end development with React, Next.js, and Tailwind CSS.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}front-end development, React, Next.js, Tailwind CSS, web development, tutorials, blog{% endblock %}">
+    <meta name="author" content="ZynBlogs">
+    
+    <link rel="shortcut icon" href="{% static 'landing_page/images/favicon.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'landing_page/css/reset.css' %}">
+    <title>{% block title %}ZynBlogs - Front-End Development Blog{% endblock %}</title>
+    
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Main Container */
+        .main-container {
+            flex: 1;
+            width: 100%;
+        }
+
+        /* Navigation Styles */
+        .navbar {
+            background: linear-gradient(135deg, #00838f 0%, #00acc1 100%);
+            box-shadow: 0 4px 12px rgba(0, 131, 143, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            position: relative;
+        }
+
+        .nav-logo a {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-logo a:hover {
+            color: #b3e5fc;
+        }
+
+        /* Mobile Menu Toggle */
+        .nav-toggle {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            width: 25px;
+            height: 20px;
+            justify-content: space-between;
+            z-index: 1001;
+        }
+
+        .nav-toggle .bar {
+            width: 100%;
+            height: 3px;
+            background-color: white;
+            border-radius: 2px;
+        }
+
+        .nav-toggle.is-active .bar:nth-child(1) {
+            transform: translateY(8.5px) rotate(45deg);
+        }
+
+        .nav-toggle.is-active .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-toggle.is-active .bar:nth-child(3) {
+            transform: translateY(-8.5px) rotate(-45deg);
+        }
+
+        /* Navigation Menu */
+        .nav-menu {
+            position: fixed;
+            left: -100%;
+            top: 60px;
+            width: 100%;
+            height: calc(100vh - 60px);
+            background: linear-gradient(135deg, #00838f 0%, #00acc1 100%);
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 0;
+            list-style: none;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .nav-menu.active {
+            left: 0;
+        }
+
+        .nav-item {
+            margin: 0;
+            width: 100%;
+        }
+
+        .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #b3e5fc;
+        }
+
+        /* Auth Buttons */
+        .auth-buttons {
+            padding: 1rem 0;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            margin-top: 1rem;
+        }
+
+        .auth-buttons .nav-link {
+            margin: 0.5rem 2rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-align: center;
+            border-bottom: none;
+            font-weight: 600;
+        }
+
+        .login-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .signup-btn {
+            background: linear-gradient(45deg, #00e676, #00c853);
+            border: 2px solid transparent;
+        }
+
+        .logout-btn {
+            background: rgba(255, 87, 87, 0.8);
+            border: 2px solid rgba(255, 87, 87, 0.3);
+        }
+
+        .login-btn:hover, .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .signup-btn:hover {
+            background: linear-gradient(45deg, #00c853, #00e676);
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: linear-gradient(135deg, #263238 0%, #37474f 100%);
+            color: white;
+            margin-top: auto;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem 1rem;
+        }
+
+        .footer-content {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #00e5ff;
+            font-weight: 600;
+        }
+
+        .footer-section p {
+            color: #b0bec5;
+            line-height: 1.8;
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            color: #78909c;
+            font-size: 0.8rem;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            color: #00838f;
+        }
+
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.75rem; }
+        h3 { font-size: 1.5rem; }
+        h4 { font-size: 1.25rem; }
+        h5 { font-size: 1.125rem; }
+        h6 { font-size: 1rem; }
+
+        p {
+            margin-bottom: 1rem;
+            color: #424242;
+        }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+
+        /* Content Styling */
+        .content-section {
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 131, 143, 0.1);
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* RESPONSIVE BREAKPOINTS */
+
+        /* Extra Small Mobile - 300px to 374px */
+        @media (max-width: 374px) {
+            .nav-container {
+                padding: 0 0.75rem;
+                height: 55px;
+            }
+            
+            .nav-logo a {
+                font-size: 1.25rem;
+            }
+            
+            .nav-toggle {
+                width: 20px;
+                height: 15px;
+            }
+            
+            .nav-toggle .bar {
+                height: 2px;
+            }
+            
+            .content-section {
+                padding: 1.5rem 0.75rem;
+                margin: 1rem 0.5rem;
+            }
+            
+            .footer-container {
+                padding: 1.5rem 0.75rem 1rem;
+            }
+            
+            h1 { font-size: 1.5rem; }
+            h2 { font-size: 1.25rem; }
+        }
+
+        /* Small Mobile - 375px and up */
+        @media (min-width: 375px) {
+            .nav-container {
+                padding: 0 1rem;
+                height: 60px;
+            }
+            
+            .nav-logo a {
+                font-size: 1.5rem;
+            }
+            
+            h1 { font-size: 1.75rem; }
+            h2 { font-size: 1.5rem; }
+        }
+
+        /* Large Mobile - 480px and up */
+        @media (min-width: 480px) {
+            .nav-container {
+                height: 65px;
+                padding: 0 1.5rem;
+            }
+            
+            .nav-logo a {
+                font-size: 1.75rem;
+            }
+            
+            .content-section {
+                padding: 2.5rem 1.5rem;
+                margin: 1.5rem;
+            }
+            
+            .footer-container {
+                padding: 2.5rem 1.5rem 1.5rem;
+            }
+            
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.75rem; }
+        }
+
+        /* Tablet Portrait - 768px and up */
+        @media (min-width: 768px) {
+            .nav-toggle {
+                display: none;
+            }
+            
+            .nav-menu {
+                position: static;
+                left: auto;
+                top: auto;
+                width: auto;
+                height: auto;
+                background: transparent;
+                flex-direction: row;
+                padding: 0;
+                align-items: center;
+                overflow: visible;
+            }
+            
+            .nav-item {
+                margin: 0 0 0 1.5rem;
+                width: auto;
+            }
+            
+            .nav-link {
+                padding: 0.5rem 0;
+                border-bottom: none;
+                display: inline-block;
+                width: auto;
+            }
+            
+            .nav-link:hover {
+                background: transparent;
+                color: #b3e5fc;
+            }
+            
+            .auth-buttons {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 1rem;
+                padding: 0;
+                border-top: none;
+                margin-top: 0;
+                margin-left: 1rem;
+            }
+            
+            .auth-buttons .nav-link {
+                margin: 0;
+                padding: 0.5rem 1.5rem;
+                border-radius: 20px;
+                font-size: 0.9rem;
+            }
+            
+            .nav-container {
+                height: 70px;
+                padding: 0 2rem;
+            }
+            
+            .content-section {
+                padding: 3rem 2rem;
+                margin: 2rem;
+            }
+            
+            .footer-container {
+                padding: 3rem 2rem 1.5rem;
+            }
+            
+            .footer-section p {
+                font-size: 1rem;
+                max-width: 600px;
+            }
+            
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            h3 { font-size: 1.75rem; }
+        }
+
+        /* Tablet Landscape / Small Desktop - 1024px and up */
+        @media (min-width: 1024px) {
+            .nav-container {
+                padding: 0 3rem;
+                height: 80px;
+            }
+            
+            .nav-logo a {
+                font-size: 2rem;
+            }
+            
+            .nav-item {
+                margin: 0 0 0 2rem;
+            }
+            
+            .nav-link {
+                font-size: 1.1rem;
+                padding: 0.75rem 0;
+            }
+            
+            .auth-buttons {
+                margin-left: 2rem;
+            }
+            
+            .content-section {
+                padding: 4rem 3rem;
+                margin: 3rem;
+            }
+            
+            .footer-container {
+                padding: 4rem 3rem 2rem;
+            }
+            
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2.25rem; }
+            h3 { font-size: 1.875rem; }
+        }
+
+        /* Large Desktop - 1200px and up */
+        @media (min-width: 1200px) {
+            .nav-container {
+                padding: 0 4rem;
+            }
+            
+            .nav-item {
+                margin: 0 0 0 2.5rem;
+            }
+            
+            .content-section {
+                padding: 5rem 4rem;
+                margin: 4rem auto;
+            }
+            
+            .footer-container {
+                padding: 5rem 4rem 2rem;
+            }
+            
+            .footer-section {
+                max-width: 800px;
+            }
+            
+            h1 { font-size: 3.5rem; }
+            h2 { font-size: 2.5rem; }
+        }
+
+        /* Extra Large Desktop - 1400px */
+        @media (min-width: 1400px) {
+            .nav-container {
+                padding: 0 5rem;
+            }
+            
+            .content-section {
+                padding: 6rem 5rem;
+            }
+            
+            .footer-container {
+                padding: 6rem 5rem 2rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .navbar,
+            .footer,
+            .nav-toggle {
+                display: none;
+            }
+            
+            .main-container {
+                margin: 0;
+                padding: 0;
+            }
+            
+            * {
+                background: white !important;
+                color: black !important;
+                box-shadow: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="/">ZynBlogs</a>
+            </div>
+            
+            <!-- Mobile menu button -->
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            
+            <!-- Navigation menu -->
+            <ul class="nav-menu" id="nav-menu">
+               
+                <li class="nav-item auth-buttons">
+                    {% if user.is_authenticated %}
+                        <a href="/profile" class="nav-link">Profile</a>
+                        <a href="{% url 'accounts:logout' %}" class="nav-link logout-btn">Logout</a>
+                    {% else %}
+                        <a href="{% url 'accounts:login' %}" class="nav-link login-btn">Login</a>
+                        <a href="{% url 'accounts:register' %}" class="nav-link signup-btn">Sign Up</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        {% block content %}
+        {% endblock content %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>ZynBlogs</h3>
+                  
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; {% now "Y" %} ZynBlogs. All rights reserved. | Empowering developers with cutting-edge front-end knowledge and modern web development techniques.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navMenu = document.getElementById('nav-menu');
+        
+        if (mobileMenu && navMenu) {
+            mobileMenu.addEventListener('click', function() {
+                mobileMenu.classList.toggle('is-active');
+                navMenu.classList.toggle('active');
+            });
+            
+            // Close mobile menu when clicking on a link
+            document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
+                mobileMenu.classList.remove('is-active');
+                navMenu.classList.remove('active');
+            }));
+        }
+    </script>
+</body>
+</html>

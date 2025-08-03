@@ -1,0 +1,62 @@
+{% extends "users/base.html" %}
+{% block title %}Home Page{% endblock title %}
+{% block content %}
+
+<div style="padding: 30px; max-width: 800px; margin: auto; font-family: sans-serif;">
+
+  <!-- Welcome Section -->
+  <div style="background: linear-gradient(to right, #00bcd4, #26c6da); padding: 30px; border-radius: 10px; color: white;">
+    <h1 style="font-size: 2.5rem;">
+      {% if user.is_authenticated %}
+        Welcome, {{ user.first_name|default:user.username }}
+      {% else %}
+        Welcome, Guest
+      {% endif %}
+    </h1>
+    <p style="font-size: 1.1rem;">
+      This <strong>tech blog web application</strong> is built with Django — a high-level Python web framework known for rapid development and clean design.
+      Authenticated users can read premium content, manage their profiles, and explore frontend technologies.
+    </p>
+    {% if not user.is_authenticated %}
+      <div style="margin-top: 20px;">
+        <a href="{% url 'login' %}" style="background: white; color: #00acc1; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">Sign In</a>
+      </div>
+    {% endif %}
+  </div>
+
+  {% if user.is_authenticated %}
+  <!-- React + Redux Blog Section -->
+  <div style="margin-top: 40px; background: #e0f7fa; padding: 25px; border-radius: 10px;">
+    <h2 style="color: #007c91;">🌟 React JS: Modern Frontend Framework</h2>
+    <p>
+      React JS is a declarative, component-based JavaScript library developed by Facebook. It enables developers to create reusable UI components
+      and manage complex UIs efficiently through its virtual DOM system.
+    </p>
+    <p>
+      React excels in building single-page applications (SPAs) where content updates dynamically without reloading the whole page.
+      Developers enjoy the modular architecture, JSX syntax, and large ecosystem including React Router, Hooks, and Context API.
+    </p>
+    <h3 style="color: #007c91; margin-top: 20px;">⚙️ Redux: State Management at Scale</h3>
+    <p>
+      Redux is a predictable state container for JavaScript applications, commonly used with React for managing global application state.
+      It follows a unidirectional data flow pattern: <strong>actions ➝ reducers ➝ store ➝ UI</strong>.
+    </p>
+    <p>
+      With Redux, components can dispatch actions to modify shared state, improving maintainability and debugging, especially in larger apps.
+      Middleware like Redux Thunk or Redux Saga extends its capabilities for handling async logic.
+    </p>
+    <p>
+      Together, React and Redux form a powerful duo for building dynamic, scalable, and maintainable web applications.
+    </p>
+  </div>
+  {% endif %}
+
+  <!-- Footer -->
+  <footer style="margin-top: 50px; text-align: center; color: #666; font-size: 0.95rem;">
+    <hr style="margin-bottom: 15px; border: none; height: 1px; background-color: #ccc;">
+    &copy; 2025 <strong>ZynWeb</strong>. All rights reserved.
+  </footer>
+
+</div>
+
+{% endblock content %}

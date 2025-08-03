@@ -1,0 +1,974 @@
+{% extends 'landing_page/base.html' %} {% load static %} {% block title
+%}Frontend Development Blog - React, Next.js, Tailwind CSS | ZynBlogs{% endblock
+%} {% block content %}
+
+<!-- Success Popup for Registration -->
+{% if messages %}
+  {% for message in messages %}
+    {% if message.tags == 'success' %}
+      <div id="successPopup" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        backdrop-filter: blur(5px);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      ">
+        <div style="
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          border-radius: 20px;
+          padding: 40px;
+          text-align: center;
+          box-shadow: 0 20px 40px rgba(8, 145, 178, 0.3);
+          border: 1px solid rgba(6, 182, 212, 0.2);
+          max-width: 400px;
+          width: 90%;
+          animation: popupSlideIn 0.5s ease-out;
+        ">
+          <div style="
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+          ">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+              <polyline points="20,6 9,17 4,12"></polyline>
+            </svg>
+          </div>
+          
+          <h2 style="
+            color: #0891b2;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+          ">Account Created!</h2>
+          
+          <p style="
+            color: #0f766e;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+          ">{{ message }}</p>
+          
+          <button onclick="closePopup()" style="
+            background: linear-gradient(135deg, #0891b2, #06b6d4);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 10px rgba(8, 145, 178, 0.3);
+          "
+          onmouseover="
+            this.style.background='linear-gradient(135deg, #0e7490, #0891b2)';
+            this.style.transform='translateY(-1px)';
+          "
+          onmouseout="
+            this.style.background='linear-gradient(135deg, #0891b2, #06b6d4)';
+            this.style.transform='translateY(0)';
+          "
+          >Get Started</button>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+<style>
+  /* Popup Animation */
+  @keyframes popupSlideIn {
+    from {
+      opacity: 0;
+      transform: scale(0.8) translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  /* Blog Page Specific Styles */
+  .blog-header {
+    background: linear-gradient(135deg, #006064 0%, #00838f 50%, #00acc1 100%);
+    color: white;
+    text-align: center;
+    padding: 3rem 1rem;
+    margin: 0;
+  }
+
+  .blog-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .blog-header p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+    color: #b3e5fc;
+  }
+
+  /* Blog Container */
+  .blog-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  /* Categories Filter */
+  .categories-filter {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 4px 12px rgba(0, 131, 143, 0.1);
+    text-align: center;
+  }
+
+  .filter-title {
+    color: #00838f;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+  }
+
+  .category-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .category-btn {
+    padding: 0.7rem 1.5rem;
+    border: 2px solid #00acc1;
+    background: white;
+    color: #00838f;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+
+  .category-btn:hover,
+  .category-btn.active {
+    background: #00acc1;
+    color: white;
+  }
+
+  /* Blog Grid */
+  .blog-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+    margin-bottom: 3rem;
+  }
+
+  /* Featured Post */
+  .featured-post {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 131, 143, 0.12);
+    border-left: 5px solid #00e676;
+    margin-bottom: 3rem;
+  }
+
+  .featured-badge {
+    background: linear-gradient(45deg, #00e676, #00c853);
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .featured-content {
+    padding: 2rem;
+  }
+
+  .featured-post h2 {
+    color: #00838f;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  .featured-post .post-excerpt {
+    color: #546e7a;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-size: 1.05rem;
+  }
+
+  /* Regular Blog Posts */
+  .blog-post {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 6px 20px rgba(0, 131, 143, 0.08);
+    border-top: 4px solid #00acc1;
+  }
+
+  .post-category {
+    display: inline-block;
+    background: rgba(0, 172, 193, 0.1);
+    color: #00838f;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .post-title {
+    color: #00838f;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .post-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .post-title a:hover {
+    color: #00acc1;
+  }
+
+  .post-meta {
+    color: #78909c;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .post-date,
+  .post-author,
+  .post-reading-time {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .post-excerpt {
+    color: #546e7a;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .post-tags {
+    margin-bottom: 1.5rem;
+  }
+
+  .tag {
+    display: inline-block;
+    background: rgba(0, 230, 118, 0.1);
+    color: #00838f;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .read-more-btn {
+    display: inline-block;
+    background: linear-gradient(45deg, #00acc1, #00838f);
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+
+  .read-more-btn:hover {
+    background: linear-gradient(45deg, #00838f, #00acc1);
+  }
+
+  /* Pagination */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding: 2rem;
+  }
+
+  .pagination a,
+  .pagination span {
+    padding: 0.7rem 1.2rem;
+    border: 2px solid #00acc1;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #00838f;
+    font-weight: 500;
+  }
+
+  .pagination a:hover,
+  .pagination .current {
+    background: #00acc1;
+    color: white;
+  }
+
+  /* Newsletter Signup */
+  .newsletter-signup {
+    background: linear-gradient(135deg, #00838f 0%, #00acc1 100%);
+    color: white;
+    text-align: center;
+    padding: 3rem 2rem;
+    border-radius: 15px;
+    margin: 3rem 0;
+  }
+
+  .newsletter-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: white;
+    font-weight: 600;
+  }
+
+  .newsletter-text {
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .newsletter-form {
+    display: flex;
+    gap: 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .newsletter-input {
+    flex: 1;
+    min-width: 250px;
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+  }
+
+  .newsletter-btn {
+    padding: 0.8rem 2rem;
+    background: linear-gradient(45deg, #00e676, #00c853);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .newsletter-btn:hover {
+    background: linear-gradient(45deg, #00c853, #00e676);
+  }
+
+  /* Responsive Design */
+  @media (min-width: 768px) {
+    .blog-header h1 {
+      font-size: 3rem;
+    }
+
+    .blog-header p {
+      font-size: 1.2rem;
+    }
+
+    .blog-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.5rem;
+    }
+
+    .blog-container {
+      padding: 3rem 2rem;
+    }
+
+    .featured-post {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+
+    .featured-content {
+      padding: 3rem;
+    }
+
+    .newsletter-form {
+      flex-wrap: nowrap;
+    }
+
+    .newsletter-input {
+      min-width: auto;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .blog-header h1 {
+      font-size: 3.5rem;
+    }
+
+    .blog-header p {
+      font-size: 1.3rem;
+    }
+
+    .blog-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+    }
+
+    .blog-container {
+      padding: 4rem 3rem;
+    }
+
+    .featured-post {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      align-items: stretch;
+      min-height: 400px;
+    }
+
+    .featured-content {
+      padding: 3rem 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .featured-post h2 {
+      font-size: 2.5rem;
+      line-height: 1.2;
+    }
+
+    .blog-post {
+      padding: 2.5rem;
+      min-height: 450px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .post-title {
+      font-size: 1.6rem;
+      flex-grow: 1;
+    }
+
+    .categories-filter {
+      padding: 2.5rem 3rem;
+    }
+
+    .filter-title {
+      font-size: 1.5rem;
+    }
+
+    .category-btn {
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
+    }
+
+    .newsletter-signup {
+      padding: 4rem 3rem;
+    }
+
+    .newsletter-title {
+      font-size: 2.2rem;
+    }
+
+    .newsletter-text {
+      font-size: 1.2rem;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .blog-header {
+      padding: 5rem 4rem;
+    }
+
+    .blog-header h1 {
+      font-size: 4rem;
+    }
+
+    .blog-container {
+      padding: 5rem 4rem;
+      max-width: 1400px;
+    }
+
+    .blog-grid {
+      gap: 4rem;
+    }
+
+    .featured-post {
+      margin-bottom: 4rem;
+    }
+
+    .featured-content {
+      padding: 4rem 5rem;
+    }
+
+    .blog-post {
+      padding: 3rem;
+      min-height: 500px;
+    }
+
+    .post-title {
+      font-size: 1.7rem;
+    }
+
+    .post-excerpt {
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .categories-filter {
+      padding: 3rem 4rem;
+    }
+
+    .newsletter-signup {
+      padding: 5rem 4rem;
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .blog-header {
+      padding: 6rem 5rem;
+    }
+
+    .blog-header h1 {
+      font-size: 4.5rem;
+    }
+
+    .blog-header p {
+      font-size: 1.4rem;
+      max-width: 800px;
+    }
+
+    .blog-container {
+      padding: 6rem 5rem;
+      max-width: 1600px;
+    }
+
+    .featured-post {
+      grid-template-columns: 1fr 1.3fr;
+      min-height: 500px;
+    }
+
+    .featured-content {
+      padding: 5rem 6rem;
+    }
+
+    .featured-post h2 {
+      font-size: 3rem;
+    }
+
+    .blog-post {
+      min-height: 550px;
+      padding: 3.5rem;
+    }
+
+    .post-title {
+      font-size: 1.8rem;
+    }
+
+    .categories-filter {
+      padding: 3.5rem 5rem;
+    }
+
+    .category-btn {
+      padding: 1rem 2.5rem;
+      font-size: 1.1rem;
+    }
+
+    .newsletter-signup {
+      padding: 6rem 5rem;
+    }
+
+    .newsletter-title {
+      font-size: 2.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .blog-header h1 {
+      font-size: 2rem;
+    }
+
+    .blog-header p {
+      font-size: 1rem;
+    }
+
+    .category-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .category-btn {
+      width: 100%;
+      max-width: 200px;
+    }
+
+    .post-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .featured-post {
+      margin: 1rem;
+    }
+
+    .pagination {
+      flex-wrap: wrap;
+    }
+
+    /* Popup responsive styles */
+    div[style*="padding: 40px"] {
+      padding: 30px 20px !important;
+    }
+    
+    h2[style*="font-size: 1.8rem"] {
+      font-size: 1.5rem !important;
+    }
+    
+    p[style*="font-size: 1.1rem"] {
+      font-size: 1rem !important;
+    }
+  }
+
+  /* Code Syntax Highlighting */
+  .code-snippet {
+    background: #263238;
+    color: #eeffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    font-family: "Courier New", monospace;
+    margin: 1rem 0;
+    overflow-x: auto;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .code-snippet .comment {
+    color: #546e7a;
+  }
+
+  .code-snippet .keyword {
+    color: #c792ea;
+  }
+
+  .code-snippet .string {
+    color: #c3e88d;
+  }
+
+  .code-snippet .function {
+    color: #82aaff;
+  }
+</style>
+
+<!-- Blog Header -->
+<section class="blog-header">
+  <div class="container">
+    <h1>Frontend Development Blog</h1>
+    <p>
+      Master React.js, Next.js, Tailwind CSS, and modern web development with
+      expert tutorials, tips, and best practices.
+    </p>
+  </div>
+</section>
+
+<!-- Blog Container -->
+<div class="blog-container">
+  <!-- Categories Filter -->
+  <div class="categories-filter">
+    <h3 class="filter-title">Browse by Technology</h3>
+    <div class="category-buttons">
+      <a href="#reactjs" class="category-btn">React.js</a>
+      <a href="#nextjs" class="category-btn">Next.js</a>
+      <a href="#tailwindcss" class="category-btn">Tailwind CSS</a>
+    </div>
+  </div>
+
+  <!-- Featured Post -->
+  <article class="featured-post">
+    <div class="featured-badge">Featured Post</div>
+    <div class="featured-content">
+      <div class="post-category">React.js</div>
+      <h2>Building Scalable React Applications: A Complete Guide</h2>
+      <div class="post-meta">
+        <span class="post-date">📅 March 15, 2024</span>
+        <span class="post-author">👤 Ahmed Hassan</span>
+        <span class="post-reading-time">⏱️ 15 min read</span>
+      </div>
+      <p class="post-excerpt">
+        Learn how to architect large-scale React applications using modern
+        patterns, state management solutions, and performance optimization
+        techniques. This comprehensive guide covers everything from project
+        structure to deployment strategies.
+      </p>
+      <div class="post-tags">
+        <span class="tag">React</span>
+        <span class="tag">Architecture</span>
+        <span class="tag">Scalability</span>
+        <span class="tag">State Management</span>
+      </div>
+      <a href="#" class="read-more-btn">Read Full Article →</a>
+    </div>
+  </article>
+
+  <!-- Blog Posts Grid -->
+  <div class="blog-grid">
+    <!-- React.js Posts -->
+
+    <article id="reactjs" class="blog-post">
+      <div class="post-category">React.js</div>
+      <h3 class="post-title">
+        <a href="#"
+          >React Context vs Redux: Choosing the Right State Solution</a
+        >
+      </h3>
+      <div class="post-meta">
+        <span class="post-date">📅 March 8, 2024</span>
+        <span class="post-author">👤 Aisha Rahman</span>
+        <span class="post-reading-time">⏱️ 12 min read</span>
+      </div>
+      <p class="post-excerpt">
+        Compare React Context API and Redux for state management. Learn the pros
+        and cons of each approach and discover when to use which solution in
+        your React applications.
+      </p>
+      <div class="post-tags">
+        <span class="tag">State Management</span>
+        <span class="tag">Context API</span>
+        <span class="tag">Redux</span>
+      </div>
+      <a href="#" class="read-more-btn">Read More →</a>
+    </article>
+
+    <!-- Next.js Posts -->
+
+    <article id="nextjs" class="blog-post">
+      <div class="post-category">Next.js</div>
+      <h3 class="post-title">
+        <a href="#">Building APIs with Next.js Route Handlers</a>
+      </h3>
+      <div class="post-meta">
+        <span class="post-date">📅 March 2, 2024</span>
+        <span class="post-author">👤 Ibrahim Khan</span>
+        <span class="post-reading-time">⏱️ 11 min read</span>
+      </div>
+      <p class="post-excerpt">
+        Create robust API endpoints using Next.js Route Handlers. Learn about
+        request handling, middleware, authentication, and database integration
+        in modern Next.js applications.
+      </p>
+      <div class="post-tags">
+        <span class="tag">API Routes</span>
+        <span class="tag">Backend</span>
+        <span class="tag">Full-stack</span>
+      </div>
+      <a href="#" class="read-more-btn">Read More →</a>
+    </article>
+
+    <!-- Tailwind CSS Posts -->
+
+    <article class="blog-post">
+      <div id="tailwindcss" class="post-category">Tailwind CSS</div>
+      <h3 class="post-title">
+        <a href="#">Dark Mode Implementation with Tailwind CSS</a>
+      </h3>
+      <div class="post-meta">
+        <span class="post-date">📅 February 24, 2024</span>
+        <span class="post-author">👤 Zainab Ahmed</span>
+        <span class="post-reading-time">⏱️ 6 min read</span>
+      </div>
+      <p class="post-excerpt">
+        Implement elegant dark mode functionality using Tailwind CSS. Learn
+        about color schemes, theme switching, and accessibility considerations
+        for dark interfaces.
+      </p>
+      <div class="post-tags">
+        <span class="tag">Dark Mode</span>
+        <span class="tag">Themes</span>
+        <span class="tag">Accessibility</span>
+      </div>
+      <a href="#" class="read-more-btn">Read More →</a>
+    </article>
+  </div>
+
+  <!-- Newsletter Signup -->
+  <section class="newsletter-signup">
+    <h3 class="newsletter-title">Stay Updated with Latest Frontend Trends</h3>
+    <p class="newsletter-text">
+      Get weekly insights, tutorials, and tips delivered directly to your inbox.
+      Join 10,000+ developers who trust ZynBlogs for frontend excellence.
+    </p>
+    <form class="newsletter-form">
+      <input
+        type="email"
+        class="newsletter-input"
+        placeholder="Enter your email address"
+        required
+      />
+      <button type="submit" class="newsletter-btn">Subscribe</button>
+    </form>
+  </section>
+
+  <!-- Pagination -->
+  <nav class="pagination">
+    <a href="#">← Previous</a>
+    <span class="current">1</span>
+    <a href="#">2</a>
+    <a href="#">3</a>
+    <a href="#">4</a>
+    <span>...</span>
+    <a href="#">10</a>
+    <a href="#">Next →</a>
+  </nav>
+</div>
+
+<script>
+  // Popup functionality
+  function closePopup() {
+    const popup = document.getElementById('successPopup');
+    if (popup) {
+      popup.style.opacity = '0';
+      popup.style.transform = 'scale(0.8)';
+      setTimeout(() => {
+        popup.style.display = 'none';
+      }, 300);
+    }
+  }
+  
+  // Auto close popup after 6 seconds
+  setTimeout(function() {
+    const popup = document.getElementById('successPopup');
+    if (popup) {
+      closePopup();
+    }
+  }, 6000);
+  
+  // Close popup when clicking outside
+  document.addEventListener('click', function(event) {
+    const popup = document.getElementById('successPopup');
+    if (popup && event.target === popup) {
+      closePopup();
+    }
+  });
+  
+  // Close popup with Escape key
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      closePopup();
+    }
+  });
+
+  // Category filter functionality with proper navigation
+  document.addEventListener("DOMContentLoaded", function () {
+    const categoryBtns = document.querySelectorAll(".category-btn");
+
+    // Set active category based on current URL
+    const currentPath = window.location.pathname;
+    categoryBtns.forEach((btn) => {
+      btn.classList.remove("active");
+      const btnHref = btn.getAttribute("href");
+      if (
+        currentPath === btnHref ||
+        (currentPath.includes("/blog/") &&
+          btnHref.includes(currentPath.split("/")[2]))
+      ) {
+        btn.classList.add("active");
+      }
+    });
+
+    // If no specific category matches, set "All Posts" as active
+    if (!document.querySelector(".category-btn.active")) {
+      document
+        .querySelector('.category-btn[href="/blog/"]')
+        .classList.add("active");
+    }
+
+    // Newsletter form submission
+    const newsletterForm = document.querySelector(".newsletter-form");
+    if (newsletterForm) {
+      newsletterForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const email = this.querySelector(".newsletter-input").value;
+        if (email) {
+          alert(
+            "Jazak Allah Khair! Thank you for subscribing! We'll send you the latest frontend development insights."
+          );
+          this.querySelector(".newsletter-input").value = "";
+        } else {
+          alert("Please enter a valid email address.");
+        }
+      });
+    }
+
+    // Smooth scroll for internal links
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute("href"));
+        if (target) {
+          target.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      });
+    });
+
+    // Add reading progress indicator
+    const progressBar = document.createElement("div");
+    progressBar.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(45deg, #00e676, #00c853);
+            z-index: 9999;
+            transition: width 0.3s ease;
+        `;
+    document.body.appendChild(progressBar);
+
+    window.addEventListener("scroll", () => {
+      const scrollTop = window.pageYOffset;
+      const docHeight = document.body.offsetHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      progressBar.style.width = scrollPercent + "%";
+    });
+  });
+</script>
+{% endblock content %}
