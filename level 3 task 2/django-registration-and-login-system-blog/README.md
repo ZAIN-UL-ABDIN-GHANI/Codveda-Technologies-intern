@@ -67,8 +67,7 @@ Follow these steps to launch the project on your machine:
 1. **Clone the project**
 
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/ZAIN-UL-ABDIN-GHANI/Codveda-Technologies-intern/tree/main/level%203%20task%202/django-registration-and-login-system-blog
 ```
 
 2. **Set up a virtual environment**
@@ -125,7 +124,7 @@ A student of Django and frontend technologies, building reusable mini apps for l
 
 ## 📜 License
 
-This project is open-source and licensed under the [MIT License](https://opensource.org/licenses/MIT).
+This project is open-source and licensed under the [MIT License]).
 
 ```
 
