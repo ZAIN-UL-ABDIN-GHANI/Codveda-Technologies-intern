@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/Roboto.woff2') format('woff2'),
+         url('/fonts/Timmana-Regular.woff') format('woff');
+  }
+
+  body {
+    @apply text-gray-900 bg-[#FFE0F7];
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 2px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  img {
+    height: 80px;
+  }
+}
+
+.font-timmana {
+  @apply text-sm font-semibold mb-4;
+  font-family: 'Timmana', sans-serif;
+}
