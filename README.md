@@ -7,23 +7,6 @@ Welcome! This repository contains all the tasks I completed during my **Remote F
 - **Mode:** Remote  
 - **Duration:** 1 Month  
 - **Status:** Successfully Completed  
-- **Certificate:** Pending (Financial Aid Candidate)
-
- 📁 Repository Structure
-├── Level-1/
-│   ├── Task-1\_Landing-Page/
-│   ├── Task-2\_Interactive-Form/
-│   └── Task-3\_DOM-Counter/
-├── Level-2/
-│   ├── Task-1\_SPA/
-│   ├── Task-2\_REST-API/
-│   └── Task-3\_Tailwind-UI/
-├── Level-3/
-│   ├── Task-1\_Component-Library/
-│   ├── Task-2\_Performance-Optimization/
-│   └── Task-3\_Advanced-Animations/
-└── README.md
-
 
  🔹 Level 1 – Basic Tasks
 
